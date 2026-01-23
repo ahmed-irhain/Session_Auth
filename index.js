@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(errorHandler);
 app.use(asyncErrorHandler);
-app.use("/user", userRouter);
+app.use("/auth", userRouter);
 
 const PORT = process.env.PORT || 3000;
 
