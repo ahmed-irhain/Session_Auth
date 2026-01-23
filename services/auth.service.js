@@ -1,4 +1,3 @@
-import e from "express";
 import { hashPassword, comparePassword } from "../config/bcrypt.js";
 import database from "../Users.json" with { type: "json" };
 import { readFile, appendFile } from "fs";
