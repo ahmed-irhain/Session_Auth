@@ -2,6 +2,8 @@ import authService from '../services/auth.service.js';
 
 export async function signUp(req, res) {
     const { name, email, password } = req.body; 
+    email.toLowerCase();
+    name.toLowerCase();
     try {
         await authService.SignUp(name, email, password);
         res.status(201).send({ message: 'User registered successfully' });
@@ -12,6 +14,7 @@ export async function signUp(req, res) {
 
 export async function login(req, res) {
     const { email, password } = req.body;
+    email.toLowerCase();
     try {
         const isValid = await authService.Login(email, password);
         if (isValid) {
