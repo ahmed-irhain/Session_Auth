@@ -8,7 +8,7 @@ export async function signUp(req, res) {
         await authService.SignUp(name, email, password);
         res.status(201).send({ message: 'User registered successfully' });
     } catch (error) {
-        res.status(500).send({ error: 'Error registering user' });
+        res.status(500).send({ error: 'Error registering user' , details: error.message });
     }
 }
 

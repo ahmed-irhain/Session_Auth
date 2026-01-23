@@ -1,6 +1,6 @@
 import { hashPassword, comparePassword } from "../config/bcrypt.js";
 import database from "../Users.json" with { type: "json" };
-import { readFile, appendFile } from "fs";
+import { readFile, appendFile, writeFile } from "fs/promises";
 
 export async function SignUp(name, email, password) {
   const hashedPassword = await hashPassword(password);
@@ -11,7 +11,12 @@ export async function SignUp(name, email, password) {
   });
   database.users.push(user);
 
-  await appendFile("../Users.json", JSON.stringify(database), "utf8");
+  try {
+    await writeFile("../Users.json", JSON.stringify(database, null, 2), "utf8");
+    return user;
+  } catch (error) {
+    throw new Error("Error saving user to database");
+  }
 }
 export async function Login(email, password) {
   const ReadUsers = await readFile("../Users.json", "utf8");
