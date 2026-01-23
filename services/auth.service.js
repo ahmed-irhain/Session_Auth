@@ -1,3 +1,4 @@
+import e from "express";
 import { hashPassword, comparePassword } from "../config/bcrypt.js";
 import database from "../Users.json" with { type: "json" };
 import { readFile, appendFile } from "fs";
@@ -20,3 +21,4 @@ export async function Login(email, password) {
   if (validate) return true;
   else return false;
 }
+export default { SignUp, Login };
