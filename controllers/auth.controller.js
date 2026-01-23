@@ -23,6 +23,6 @@ export async function login(req, res) {
             res.status(401).send({ error: 'Invalid credentials' });
         }
     } catch (error) {
-        throw new Error('Error during login');
+        res.status(500).send({ error: 'Error during login' });
     }
 }
