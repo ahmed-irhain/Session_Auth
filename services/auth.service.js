@@ -1,5 +1,5 @@
 import { hashPassword, comparePassword } from "../config/bcrypt.js";
-import { users } from "../Users.json";
+import database from "../Users.json" with { type: "json" };
 import { readFile, appendFile } from "fs";
 
 export async function SignUp(name, email, password) {
@@ -9,9 +9,9 @@ export async function SignUp(name, email, password) {
     email: email,
     password: hashedPassword,
   });
-  users.push(user);
+  database.users.push(user);
 
-  await appendFile("../Users.json", JSON.stringify(users), "utf8");
+  await appendFile("../Users.json", JSON.stringify(database), "utf8");
 }
 export async function Login(email, password) {
   const ReadUsers = await readFile("../Users.json", "utf8");
