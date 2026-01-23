@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import errorHandler from "./middleware/ErrorHandler";
-import asyncErrorHandler from "./middleware/AsyncErrorHandler";
+import errorHandler from "./middleware/ErrorHandler.js";
+import asyncErrorHandler from "./middleware/AsyncErrorHandler.js";
 import userRouter from "./routes/auth.route.js";
 
 const app = express();
