@@ -26,3 +26,5 @@ export async function login(req, res) {
         res.status(500).send({ error: 'Error during login' });
     }
 }
+
+export default { signUp, login };
