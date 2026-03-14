@@ -15,13 +15,11 @@ app.use(session({
 
 app.use("/auth", userRouter);
 
-const PORT = process.env.PORT || 3000;
-
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.send(err.stack).status(err.status || 500)
 })
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Server running on port ${PORT}`);
 });
