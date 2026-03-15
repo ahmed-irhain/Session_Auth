@@ -1,4 +1,5 @@
 import authService from '../services/auth.service.js';
+import session from '../utils/session.js';
 
 export async function signUp(req, res) {
     const { name, email, password } = req.body; 
@@ -18,7 +19,11 @@ export async function login(req, res) {
     try {
         const isValid = await authService.Login(email, password);
         if (isValid) {
-            res.status(200).send({ message: 'Login successful' });
+            const sessionId = session.createSessionID()
+            session.createSession(sessionId, email)
+            res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`)
+            status(200).send({ message: 'Login successful' });
+            
         } else {
             res.status(401).send({ error: 'Invalid credentials' });
         }
