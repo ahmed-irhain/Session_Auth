@@ -5,8 +5,8 @@ function createSessionID() {
     return crypto.randomBytes(16).toString('hex');
 }
 
-function createSession(email){
-    return session[createSessionID] = {
+function createSession(id, email){
+    session[id] = {
         email: email
     };
 }
@@ -16,6 +16,7 @@ function deleteSession(sessionID){
 }
 
 export default {
+    createSessionID,
     createSession,
     deleteSession
 }
