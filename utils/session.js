@@ -10,3 +10,7 @@ function createSession(email){
         email: email
     };
 }
+
+function deleteSession(sessionID){
+   delete session.sessionID
+}
