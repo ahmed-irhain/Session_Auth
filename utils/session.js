@@ -14,3 +14,8 @@ function createSession(email){
 function deleteSession(sessionID){
    delete session.sessionID
 }
+
+export default {
+    createSession,
+    deleteSession
+}
