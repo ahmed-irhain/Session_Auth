@@ -21,8 +21,7 @@ export async function login(req, res) {
         if (isValid) {
             const sessionId = session.createSessionID()
             session.createSession(sessionId, email)
-            res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`)
-            status(200).send({ message: 'Login successful' });
+            res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`).status(200).send({ message: 'Login successful' });
             
         } else {
             res.status(401).send({ error: 'Invalid credentials' });
