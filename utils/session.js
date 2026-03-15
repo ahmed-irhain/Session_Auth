@@ -11,6 +11,10 @@ function createSession(id, email){
     };
 }
 
+function getSession(id){
+    return session.id
+}
+
 function deleteSession(sessionID){
    delete session.sessionID
 }
@@ -18,5 +22,6 @@ function deleteSession(sessionID){
 export default {
     createSessionID,
     createSession,
-    deleteSession
+    deleteSession,
+    getSession
 }
