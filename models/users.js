@@ -1,7 +1,12 @@
 import db from '../config/db.js';
 
-function AddUser(name, email, password){
-    db.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
+async function AddUser(name, email, password){
+    try{
+        await db.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
+
+    }catch (err){
+        throw err;
+    }
 }
 
 async function findByEmail(email){
