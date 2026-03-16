@@ -12,7 +12,7 @@ function createSession(id, email){
 }
 
 function getSession(id){
-    return session.id
+    return session[id]
 }
 
 function deleteSession(sessionID){
