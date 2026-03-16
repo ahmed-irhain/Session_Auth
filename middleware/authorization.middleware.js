@@ -14,3 +14,5 @@ function CheckSession (req, res, next){
      }
 
 }
+
+export default CheckSession;
