@@ -18,3 +18,5 @@ async function findByEmail(email){
         throw err;
     }
 }
+
+export default {AddUser,findByEmail}
