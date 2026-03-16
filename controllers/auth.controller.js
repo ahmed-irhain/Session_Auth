@@ -1,5 +1,5 @@
 import authService from '../services/auth.service.js';
-import session from '../utils/session.js';
+import session from '../models/session.js';
 
 export async function signUp(req, res) {
     const { name, email, password } = req.body; 
@@ -9,16 +9,11 @@ export async function signUp(req, res) {
         await authService.SignUp(name, email, password);
         res.status(201).send({ message: 'User registered successfully' });
     } catch (error) {
-        res.status(500).send({ error: 'Error registering user' , details: error.message });
+        res.status(error.status || 500).send({ error: 'Error registering user' , details: error.message });
     }
 }
 
 export async function login(req, res) {
-  /*  const cookie=req.headers.cookie
-    const userSession = session.getSession(cookie.split('=')[1])
-    if(cookie && userSession){
-        return res.send(`session arrived!! ${userSession.email} `).status(200)
-    }*/
     const { email, password } = req.body;
     email.toLowerCase();
     try {
@@ -33,7 +28,7 @@ export async function login(req, res) {
             res.status(401).send({ error: 'Invalid credentials' });
         }
     } catch (error) {
-        res.status(500).send({ error: 'Error during login' });
+        res.status(error.status || 500).send({ error: 'Error during login' });
     }
 }
 
