@@ -14,14 +14,20 @@ export async function signUp(req, res) {
 }
 
 export async function login(req, res) {
+  /*  const cookie=req.headers.cookie
+    const userSession = session.getSession(cookie.split('=')[1])
+    if(cookie && userSession){
+        return res.send(`session arrived!! ${userSession.email} `).status(200)
+    }*/
     const { email, password } = req.body;
     email.toLowerCase();
     try {
         const isValid = await authService.Login(email, password);
         if (isValid) {
+
             const sessionId = session.createSessionID()
             session.createSession(sessionId, email)
-            res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`).status(200).send({ message: 'Login successful' });
+            return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`).status(200).send({ message: 'Login successful' });
             
         } else {
             res.status(401).send({ error: 'Invalid credentials' });
