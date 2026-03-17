@@ -1,10 +1,10 @@
 import express from "express"
-import CheckSession from "../middleware/authorization.middleware.js"
+import checkSession from "../middleware/authorization.middleware.js"
+import profileController from "../controllers/profile.controller.js"
+
 const router = express.Router()
 
 
-router.get("/profile", CheckSession,(req, res) => {
-  
-})
+router.get("/", checkSession, profileController)
 
 export default router;
