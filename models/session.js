@@ -1,26 +1,40 @@
 import crypto from 'crypto';
-const session = {};
+import redis from '../config/redis.js';
 
-function createSessionID() {
+function generateSessionId() {
     return crypto.randomBytes(16).toString('hex');
 }
 
-function createSession(id, email){
-    session[id] = {
-        email: email
-    };
+async function createSession(email){
+    const sessionId = generateSessionId()
+    try{
+        await redis.set(`session:${sessionId}`, email, "EX",30)
+        return sessionId;
+    }
+    catch (err){
+        throw err;
+    }
 }
 
-function getSession(id){
-    return session[id]
+async function getSession(sessionId){
+    try {
+        const session = await redis.get(`session:${sessionId}`)
+        return session;
+        
+    } catch (error) {
+        throw new Error("No session stored")
+    }
 }
 
-function deleteSession(sessionID){
-   delete session.sessionID
+async function deleteSession(sessionID){
+   try{
+    await redis.del(`session:${sessionID}`)
+   }catch (err){
+    throw err;
+   }
 }
 
 export default {
-    createSessionID,
     createSession,
     deleteSession,
     getSession

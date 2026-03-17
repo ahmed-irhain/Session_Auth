@@ -1,16 +1,25 @@
 import session from "../models/session.js"
 
-function CheckSession (req, res, next){
-     const cookie=req.headers.cookie
-     const userSessionId = cookie.match(/sessionId=([^;]+)/)[1]
-     const userSession = session.getSession(userSessionId) // if we use real db, this must be asynchronized
-     if(userSession){
-        req.session = userSession;
-        next();
+async function CheckSession (req, res, next){
+     const cookie=req.headers.cookie || ''
+     const sessionCookie = cookie.match(/sessionId=([^;]+)/)
+     if (sessionCookie){
+         const sessionId = sessionCookie[1]
+         try {
+            const userSession = await session.getSession(sessionId)
+            req.session = userSession;
+            next();
+            
+         } catch (error) {
+            // next(error)
+            next({ stack: error, status: 401 }); 
+
+         }
      }
      else{
-        res.status(401).send("Unable to find user session")
-     }
+        // res.statu401).send("Unable to find user session")
+        next({stack:"no session", status:401}) 
+      }
 
 }
 

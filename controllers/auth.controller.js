@@ -25,10 +25,14 @@ export async function login(req, res) {
                     return res.status(200).send({ message: 'Login successful' })
                 }
             }
-            const sessionId = session.createSessionID()
-            session.createSession(sessionId, email.toLowerCase())
-            return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`
-            ).status(200).send({ message: 'Login successful' });
+            try {
+                const sessionId = await session.createSession(email.toLowerCase())
+                return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`
+                ).status(200).send({ message: 'Login successful' });
+                
+            } catch (error) {
+                throw error;
+            }
             
         } else {
             res.status(401).send({ error: 'Invalid credentials' });
