@@ -27,7 +27,7 @@ export async function login(req, res) {
             }
             try {
                 const sessionId = await session.createSession(email.toLowerCase())
-                return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=15000`
+                return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=30`
                 ).status(200).send({ message: 'Login successful' });
                 
             } catch (error) {

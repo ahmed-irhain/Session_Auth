@@ -7,12 +7,15 @@ async function CheckSession (req, res, next){
          const sessionId = sessionCookie[1]
          try {
             const userSession = await session.getSession(sessionId)
+            if(!userSession) {
+               throw new Error({ stack: "no session", status: 401 });
+            }
             req.session = userSession;
             next();
             
          } catch (error) {
             // next(error)
-            next({ stack: error, status: 401 }); 
+            next({stack:"no session", status:401}) 
 
          }
      }
