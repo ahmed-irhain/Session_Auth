@@ -2,9 +2,8 @@ import session from "../models/session.js"
 
 function CheckSession (req, res, next){
      const cookie=req.headers.cookie
-     const userSessionId = cookie.split('=')[1]
-    //  const userSessionId = cookie.match(/sessionId=([^;]+)/)[1]
-     const userSession = session.getSession(userSessionId)
+     const userSessionId = cookie.match(/sessionId=([^;]+)/)[1]
+     const userSession = session.getSession(userSessionId) // if we use real db, this must be asynchronized
      if(userSession){
         req.session = userSession;
         next();
