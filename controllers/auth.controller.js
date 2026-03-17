@@ -19,11 +19,14 @@ export async function login(req, res) {
     try {
         const isValid = await authService.Login(email, password);
         if (isValid) {
-            const cookie=req.headers.cookie
-            const userSessionId = cookie.match(/sessionId=([^;]+)/)[1]
-            const userSession = session.getSession(userSessionId) // if we use real db, this must be asynchronized
-            if(userSession){
-                res.status(200).send({ message: 'Login successful' })
+            const cookie=req.headers.cookie || ''
+            const userSessionCookie = cookie.match(/sessionId=([^;]+)/)
+            if (userSessionCookie){
+                const userSessionId = userSessionCookie[1]
+                const userSession = session.getSession(userSessionId) // if we use real db, this must be asynchronized
+                if(userSession){
+                    return res.status(200).send({ message: 'Login successful' })
+                }
             }
             const sessionId = session.createSessionID()
             session.createSession(sessionId, email)
