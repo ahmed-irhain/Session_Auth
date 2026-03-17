@@ -30,7 +30,7 @@ async function deleteSession(sessionID){
    try{
     await redis.del(`session:${sessionID}`)
    }catch (err){
-    throw err;
+    throw new Error("No session stored", err);
    }
 }
 

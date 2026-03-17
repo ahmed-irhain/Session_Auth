@@ -20,7 +20,7 @@ export async function login(req, res) {
             const userSessionCookie = cookie.match(/sessionId=([^;]+)/)
             if (userSessionCookie){
                 const userSessionId = userSessionCookie[1]
-                const userSession = session.getSession(userSessionId) // if we use real db, this must be asynchronized
+                const userSession = await session.getSession(userSessionId)
                 if(userSession){
                     return res.status(200).send({ message: 'Login successful' })
                 }
@@ -42,4 +42,20 @@ export async function login(req, res) {
     }
 }
 
-export default { signUp, login };
+async function logout(req, res) {
+
+        const cookie = req.headers.cookie || "";
+        const userSessionCookie = cookie.match(/sessionId=([^;]+)/);
+        if (userSessionCookie) {
+            const userSessionId = userSessionCookie[1];
+            try {
+                await session.deleteSession(userSessionId)
+                return res.status(200).send({ message: "signed out successfully!" });
+                
+            } catch (error) {
+                throw new Error({status: 500, stack: "Failed at signing out"});
+            }
+        }
+
+}
+export default { signUp, login, logout};
