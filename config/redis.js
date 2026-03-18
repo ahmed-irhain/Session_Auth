@@ -1,8 +1,9 @@
 import Redis from "ioredis";
+import "dotenv/config";
 
 const redis = new Redis({
-    host: "localhost",
-    port: 6379
-})
+  host: DB_REDIS_HOST,
+  port: 6379,
+});
 
 export default redis;
