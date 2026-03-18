@@ -1,6 +1,7 @@
 import users from "../models/users.js"
-export default async function profileController(req, res){
+
+export default async function profileController(req, res, next){
     const email = req.session
     const user = await users.findByEmail(email)
-    res.send(user[0])
+    res.send(user[0])  
 }

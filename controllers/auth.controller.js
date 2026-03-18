@@ -1,61 +1,43 @@
-import authService from '../services/auth.service.js';
-import session from '../models/session.js';
+import authService from "../services/auth.service.js";
+import session from "../models/session.js";
 
 export async function signUp(req, res) {
-    const { name, email, password } = req.body; 
-    try {
-        await authService.SignUp(name.toLowerCase(), email.toLowerCase(), password);
-        res.status(201).send({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(error.status || 500).send({ error: 'Error registering user' , details: error.message });
-    }
+    const { name, email, password } = req.body;
+    await authService.SignUp(name.toLowerCase(), email.toLowerCase(), password);
+    res.status(201).send({ message: "User registered successfully" });
 }
 
 export async function login(req, res) {
     const { email, password } = req.body;
-    try {
-        const isValid = await authService.Login(email.toLowerCase(), password);
-        if (isValid) {
-            const cookie=req.headers.cookie || ''
-            const userSessionCookie = cookie.match(/sessionId=([^;]+)/)
-            if (userSessionCookie){
-                const userSessionId = userSessionCookie[1]
-                const userSession = await session.getSession(userSessionId)
-                if(userSession){
-                    return res.status(200).send({ message: 'Login successful' })
-                }
-            }
-            try {
-                const sessionId = await session.createSession(email.toLowerCase())
-                return res.setHeader('Set-Cookie', `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=30`
-                ).status(200).send({ message: 'Login successful' });
-                
-            } catch (error) {
-                throw error;
-            }
-            
-        } else {
-            res.status(401).send({ error: 'Invalid credentials' });
-        }
-    } catch (error) {
-        res.status(error.status || 500).send({ error: 'Error during login' });
+    await authService.Login(email.toLowerCase(), password);
+    const cookie = req.headers.cookie || "";
+    const userSessionCookie = cookie.match(/sessionId=([^;]+)/);
+    if (!userSessionCookie) {
+        const sessionId = await session.createSession(email.toLowerCase());
+        return res
+            .setHeader(
+                "Set-Cookie",
+                `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=30`,
+            )
+            .status(200)
+            .send({ message: "Login successful" });
+
+    }
+    const userSessionId = userSessionCookie[1];
+    const userSession = await session.getSession(userSessionId);
+    if (userSession) {
+        return res.status(200).send({message:"already logged in"});
     }
 }
 
 async function logout(req, res) {
-
-        const cookie = req.headers.cookie || "";
-        const userSessionCookie = cookie.match(/sessionId=([^;]+)/);
-        if (userSessionCookie) {
-            const userSessionId = userSessionCookie[1];
-            try {
-                await session.deleteSession(userSessionId)
-                return res.status(200).send({ message: "signed out successfully!" });
-                
-            } catch (error) {
-                throw new Error({status: 500, stack: "Failed at signing out"});
-            }
-        }
-
+    const cookie = req.headers.cookie || "";
+    const userSessionCookie = cookie.match(/sessionId=([^;]+)/);
+    if (userSessionCookie) {
+        const userSessionId = userSessionCookie[1];
+        await session.deleteSession(userSessionId);
+        return res.status(200).send({ message: "signed out successfully!" });
+    }
+    throw ({stack: "Session not found", status: 400})
 }
-export default { signUp, login, logout};
+export default { signUp, login, logout };

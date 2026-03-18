@@ -7,21 +7,21 @@ async function CheckSession (req, res, next){
          const sessionId = sessionCookie[1]
          try {
             const userSession = await session.getSession(sessionId)
-            if(!userSession) {
-               throw new Error({ stack: "no session", status: 401 });
-            }
+            // if(!userSession) {
+            //    throw new Error({ stack: "Unauthorized access!", status: 401 });
+            // }
             req.session = userSession;
             next();
             
          } catch (error) {
-            // next(error)
-            next({stack:"no session", status:401}) 
-
+            next(error); 
          }
      }
      else{
-        // res.statu401).send("Unable to find user session")
-        next({stack:"no session", status:401}) 
+         next({
+            stack: "Unauthorized access!",
+            status: 401,
+         }); 
       }
 
 }

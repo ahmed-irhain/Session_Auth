@@ -6,15 +6,23 @@ export async function SignUp(name, email, password) {
   try {
     await users.AddUser(name, email, hashedPassword)
   } catch (error) {
-    throw new Error("Error saving user to database");
+    throw error
   }
 }
 
 export async function Login(email, passwordClaim) {
-  const user = await users.findByEmail(email)
-  const userPassword = user[0]["password"]
-  const validate = await comparePassword(passwordClaim, userPassword);
-  if (validate) return true; 
-  else return false;
+  try {
+    const user = await users.findByEmail(email)
+    const userPassword = user[0]["password"]
+    const validate = await comparePassword(passwordClaim, userPassword);
+    if (!validate){
+      throw new Error({
+        stack: "Unvalid credintials",
+        status: 401,
+      });
+    }
+  } catch (error) {
+    throw error
+  }
 }
 export default { SignUp, Login };

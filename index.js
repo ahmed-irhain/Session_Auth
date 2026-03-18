@@ -12,7 +12,7 @@ app.use("/profile", profileRouter);
 
 app.use((err, req, res, next) => {
     console.error(`${err.status} - ${err.stack}`);
-    res.status(err.status || 500).send(err.stack)
+    res.status(err.status || 500).send(err)
 })
 
 app.listen(process.env.PORT || 3000, () => {
