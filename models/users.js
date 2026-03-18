@@ -5,7 +5,7 @@ async function AddUser(name, email, password){
         await db.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
 
     }catch (err){
-        throw new Error({stack: "Failed to register",details: err})
+        throw ({stack: "Failed to register",details: err})
     }
 }
 

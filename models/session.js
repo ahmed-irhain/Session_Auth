@@ -12,7 +12,7 @@ async function createSession(email){
         return sessionId;
     }
     catch (err){
-        throw new Error({stack: "Error storing user session", details: err});
+        throw ({stack: "Error storing user session", details: err});
     }
 }
 
@@ -22,7 +22,7 @@ async function getSession(sessionId){
         return session;
         
     } catch (error) {
-        throw new Error({stack:"Unathourized access", status: 401})
+        throw ({stack:"Unathourized access", status: 401})
     }
 }
 
@@ -30,10 +30,10 @@ async function deleteSession(sessionID){
    try{
     const response = await redis.del(`session:${sessionID}`)
     if (response === 0){
-        throw new Error("already signed out")
+        throw ({stack:"already signed out"})
     }
    }catch (err){
-    throw new Error({stack:"Failed at signing out", status:500, details:err});
+    throw ({stack:"Failed at signing out", status:500, details:err});
    }
 }
 
