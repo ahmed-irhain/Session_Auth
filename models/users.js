@@ -12,10 +12,11 @@ async function AddUser(name, email, password){
 async function findByEmail(email){
     try{
         const result = await db.query('SELECT * FROM users WHERE email=$1', [email])
+        if(result.rowCount === 0) throw new Error("email not found") 
         return result.rows
 
     } catch(err){
-        throw new Error({stack: "Cannot find email",details: err})
+        throw ({stack: "Cannot find email",details: err, status: 400})
     }
 }
 
