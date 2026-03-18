@@ -17,7 +17,7 @@ export async function login(req, res) {
         return res
             .setHeader(
                 "Set-Cookie",
-                `sessionId=${sessionId}; httpOnly; Path=/; Max-Age=30`,
+                `sessionId=${sessionId}; HttpOnly; Path=/; Max-Age=30`,
             )
             .status(200)
             .send({ message: "Login successful" });
